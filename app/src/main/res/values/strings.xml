@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">speedGame</string>
+    <string name="new_player">NOUVEAU JOUEUR</string>
+    <string name="new_game">NOUVELLE PARTIE</string>
+    <string name="Hint_joueur1">JOUEUR 1</string>
+    <string name="Hint_joueur2">JOUEUR 2</string>
+    <string name="Hint_question1">Question joueur 1</string>
+    <string name="Hint_question2">Question joueur 2</string>
+    <string name="player_name1">Nom joueur</string>
+    <string name="player_name2">Nom joueur 2</string>
+    <string name="menu">MENU</string>
+    <string name="restart">REJOUER</string>
+    <string name="_0">0</string>
+    <string name="menu_question">Questions</string>
+    <string name="menu_settings">Paramètre</string>
+    <string name="menu_about">À propos</string>
+    <string name="restart_game">Voulez vous recommencer ?</string>
+</resources>

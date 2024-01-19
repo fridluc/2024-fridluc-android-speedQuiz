@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size">25sp</dimen>
+    <dimen name="question_size">30sp</dimen>
+    <dimen name="size_number">100sp</dimen>
+    <dimen name="margin_toolbar">10dp</dimen>
+</resources>
