@@ -28,7 +28,6 @@ public class SpeedQuizSQLiteOpenHelper {
         questions.add(new Question("Newton a découvert la gravité", true));
         questions.add(new Question("Léonard de vinci est un youtuber", false));
         questions.add(new Question("Messi est le joueur avec le plus de ballon d'or de l'histoire", true));
-        questions.add(new Question("Michael Schumacher est un légume", true));
 
     }
 
