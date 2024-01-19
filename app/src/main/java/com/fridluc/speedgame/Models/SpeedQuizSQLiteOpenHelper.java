@@ -7,6 +7,9 @@ public class SpeedQuizSQLiteOpenHelper {
 
     private final ArrayList<Question> questions = new ArrayList<>();
 
+    /**
+     * Méthode qui rend en compte une liste de question
+     */
     public SpeedQuizSQLiteOpenHelper() {
         questions.add(new Question("La France est en Europe.", true));
         questions.add(new Question("La Terre est plate.", false));
@@ -31,6 +34,10 @@ public class SpeedQuizSQLiteOpenHelper {
 
     }
 
+    /**
+     * Méthode qui reprend la liste de question
+     * @return la liste de questions
+     */
     public List<Question> getQuestions() {
         return questions;
     }
