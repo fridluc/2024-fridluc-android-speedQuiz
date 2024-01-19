@@ -1,7 +1,6 @@
 package com.fridluc.speedgame.Models;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SpeedQuizSQLiteOpenHelper {
 
@@ -38,7 +37,7 @@ public class SpeedQuizSQLiteOpenHelper {
      * Méthode qui reprend la liste de question
      * @return la liste de questions
      */
-    public List<Question> getQuestions() {
+    public ArrayList<Question> getQuestions() {
         return questions;
     }
 }

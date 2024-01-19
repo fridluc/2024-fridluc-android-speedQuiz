@@ -11,7 +11,7 @@ import com.fridluc.speedgame.Controllers.GameManager;
 import com.fridluc.speedgame.Models.Question;
 import com.google.android.material.button.MaterialButton;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -30,7 +30,7 @@ public class GameActivity extends AppCompatActivity {
 
     private View relativeLayout;
     private View ligneSeparation;
-    private List<Question> questions;
+    private ArrayList<Question> questions;
 
     private int questionEnCoursIndex = 0;
     private int scoreJoueur1Value = 0;
