@@ -30,11 +30,6 @@ public class SpeedQuizSQLiteOpenHelper {
         questions.add(new Question("Messi est le joueur avec le plus de ballon d'or de l'histoire", true));
         questions.add(new Question("Michael Schumacher est un légume", true));
 
-        questions.add(new Question("La conjecture de Riemann a été résolue.", false));
-        questions.add(new Question("Le dernier théorème de Fermat a été démontré en utilisant la theorise des nombres modulaires.", false));
-        questions.add(new Question("La machine de Turing universelle peut résoudre tous les problèmes décidables.", true));
-        questions.add(new Question("Le dernier élément du groupe noble des gaz est l'oganesson.", true));
-
     }
 
     public List<Question> getQuestions() {
