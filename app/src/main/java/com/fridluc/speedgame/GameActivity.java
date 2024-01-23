@@ -2,20 +2,22 @@ package com.fridluc.speedgame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.fridluc.speedgame.Controllers.GameManager;
+import com.fridluc.speedgame.Controllers.QuestionManager;
 import com.fridluc.speedgame.Models.Question;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GameActivity extends AppCompatActivity {
 
-    //Initialisation des variables globales
+    // Initialisation des variables globales
     private MaterialButton BT_Redémarrer;
     private MaterialButton BT_Menu;
     private MaterialButton BT_Joueur1;
@@ -31,19 +33,21 @@ public class GameActivity extends AppCompatActivity {
     private View relativeLayout;
     private View ligneSeparation;
     private ArrayList<Question> questions;
-
-    private int questionEnCoursIndex = 0;
     private int scoreJoueur1Value = 0;
     private int scoreJoueur2Value = 0;
     private final int JOUEUR1 = 1;
     private final int JOUEUR2 = 2;
+
+    Handler handler;
+    Runnable questionRunnable = null;
+    QuestionManager qManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_activity);
 
-        //Affecte les ID au variables
+        // Affecte les ID aux variables
         BT_Redémarrer = findViewById(R.id.btn_restart);
         BT_Menu = findViewById(R.id.btn_menu);
         BT_Joueur1 = findViewById(R.id.hitButtonPlayer1);
@@ -60,42 +64,47 @@ public class GameActivity extends AppCompatActivity {
         relativeLayout = findViewById(R.id.relativeLayout);
         ligneSeparation = findViewById(R.id.ligne_de_separation);
 
-        //Récupère les noms des joueurs
+        relativeLayout.setVisibility(View.INVISIBLE);
+
+        // Récupère les noms des joueurs
         Intent activityGame = getIntent();
         String joueur1 = activityGame.getStringExtra("Joueur1");
         TV_Joueur1.setText(joueur1);
         String joueur2 = activityGame.getStringExtra("Joueur2");
         TV_Joueur2.setText(joueur2);
 
-        //Récupère les questions les mélanges et affiche la première
-        questions = GameManager.getInstance().getQuestions();
-        melangerQuestions();
-        afficherQuestionSuivante();
+        // Récupère les questions, les mélange et affiche la première
+        questions = QuestionManager.getInstance(this).getQuestions();
+
+        qManager = new QuestionManager(this);
+
+        Collections.shuffle(questions);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        //Incrémente le score du joueur 1 et affiche la question d'après
+        startQuestionIterative();
+
         BT_Joueur1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                afficherQuestionSuivante();
-                incrementerScoreJoueur(JOUEUR1);
+                startQuestionIterative();
+                int reponseActuelle = qManager.getReponseQuestionEnCours();
+                incrementerScoreJoueur(JOUEUR1, reponseActuelle);
             }
         });
 
-        //Incrémente le score du joueur 2 et affiche la question d'après
         BT_Joueur2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                afficherQuestionSuivante();
-                incrementerScoreJoueur(JOUEUR2);
+                startQuestionIterative();
+                int reponseActuelle = qManager.getReponseQuestionEnCours();
+                incrementerScoreJoueur(JOUEUR2, reponseActuelle);
             }
         });
 
-        //Arrête le jeu et retourne au démarrage de l'application
         BT_Menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,78 +112,105 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
-        //Recommence le jeu
         BT_Redémarrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //rend invisible le relativeLayout et fait apparaitre
-                // une barre de séparation entre les questions
                 relativeLayout.setVisibility(View.INVISIBLE);
                 ligneSeparation.setVisibility(View.VISIBLE);
 
-                // Réinitialise les scores des joueurs
                 scoreJoueur1.setText(String.valueOf(scoreJoueur1Value = 0));
                 scoreJoueur2.setText(String.valueOf(scoreJoueur2Value = 0));
 
-                //Réactive les boutons pour recommencer le jeu
                 BT_Joueur1.setEnabled(true);
                 BT_Joueur2.setEnabled(true);
 
-                questionEnCoursIndex = 0;
+                qManager.setQuestionEnCoursIndex(0);
 
-                melangerQuestions();
+                Collections.shuffle(questions);
 
-                afficherQuestionSuivante();
-
+                startQuestionIterative();
             }
         });
-
     }
 
-    // Fonction qui permet de retourner a la page d'accueil
-    private void retournerAMainActivity() {
-        finish();
-    }
-
-    // Fonction qui permet d'augmenter le score des joueurs
-    private void incrementerScoreJoueur(int joueur) {
-        if (joueur == 1) {
-            scoreJoueur1Value++;
+    private void incrementerScoreJoueur(int joueur, int reponse) {
+        if (joueur == JOUEUR1) {
+            if (reponse == 1) {
+                // Réponse vraie et le joueur appuie, il gagne un point
+                scoreJoueur1Value++;
+            } else {
+                // Réponse fausse et le joueur appuie, il perd un point
+                scoreJoueur1Value = Math.max(0, scoreJoueur1Value - 1);
+            }
             scoreJoueur1.setText(String.valueOf(scoreJoueur1Value));
-        } else if (joueur == 2) {
-            scoreJoueur2Value++;
+        } else if (joueur == JOUEUR2) {
+            if (reponse == 1) {
+                // Réponse vraie et le joueur appuie, il gagne un point
+                scoreJoueur2Value++;
+            } else {
+                // Réponse fausse et le joueur appuie, il perd un point
+                scoreJoueur2Value = Math.max(0, scoreJoueur2Value - 1);
+            }
             scoreJoueur2.setText(String.valueOf(scoreJoueur2Value));
         }
     }
 
-    // Fonction qui permet d'afficher les questions au clique d'un bouton
-    private void afficherQuestionSuivante() {
-        if (questionEnCoursIndex < questions.size()) {
-            String questionEnCours = questions.get(questionEnCoursIndex).getIntitule();
-            questionJoueur1.setText(questionEnCours);
-            questionJoueur2.setText(questionEnCours);
+    private void resultatFinPartie() {
+        BT_Joueur1.setEnabled(false);
+        BT_Joueur2.setEnabled(false);
 
-            // Incrémente l'index de la question pour la suivante
-            questionEnCoursIndex++;
+        if (scoreJoueur1Value < scoreJoueur2Value) {
+            questionJoueur1.setText(R.string.loose);
+            questionJoueur2.setText(R.string.win);
+        } else if (scoreJoueur1Value > scoreJoueur2Value) {
+            questionJoueur1.setText(R.string.win);
+            questionJoueur2.setText(R.string.loose);
         } else {
-            //Demande aux joueurs si ils veulent recommencer
-            //et affiche le relativeLayout
-            questionJoueur1.setText(R.string.restart_game);
-            questionJoueur2.setText(R.string.restart_game);
-            relativeLayout.setVisibility(View.VISIBLE);
-
-            //Grise les boutons des joueurs
-            //et rend invisible la ligne de séparation
-            BT_Joueur1.setEnabled(false);
-            BT_Joueur2.setEnabled(false);
-            ligneSeparation.setVisibility(View.INVISIBLE);
-
+            questionJoueur1.setText(R.string.equals);
+            questionJoueur2.setText(R.string.equals);
         }
     }
 
-    // Fonction qui permet de mélanger les questions
-    private void melangerQuestions() {
-        GameManager.getInstance().melangerQuestions();
+    private void startQuestionIterative(){
+        handler = new Handler();
+
+        questionRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(qManager.endOfList()){
+                    relativeLayout.setVisibility(View.VISIBLE);
+                    ligneSeparation.setVisibility(View.INVISIBLE);
+
+                    resultatFinPartie();
+                    handler.removeCallbacks(this);
+                } else {
+                    String questionEnCours = qManager.recevoirQuestion();
+                    questionJoueur1.setText(questionEnCours);
+                    questionJoueur2.setText(questionEnCours);
+
+                    int reponseActuelle = qManager.getReponseQuestionEnCours();
+
+                    if (reponseActuelle == 0) {
+                        // Réponse fausse, les joueurs gagnent 1 point chacun
+                        scoreJoueur1Value++;
+                        scoreJoueur2Value++;
+                    } else {
+                        // Réponse vraie, les joueurs perdent 1 point chacun
+                        scoreJoueur1Value = Math.max(0, scoreJoueur1Value - 1);
+                        scoreJoueur2Value = Math.max(0, scoreJoueur2Value - 1);
+                    }
+
+                    scoreJoueur1.setText(String.valueOf(scoreJoueur1Value));
+                    scoreJoueur2.setText(String.valueOf(scoreJoueur2Value));
+
+                    handler.postDelayed(this, 2000);
+                }
+            }
+        };
+        handler.postDelayed(questionRunnable, 1000);
+    }
+
+    private void retournerAMainActivity() {
+        finish();
     }
 }
-
