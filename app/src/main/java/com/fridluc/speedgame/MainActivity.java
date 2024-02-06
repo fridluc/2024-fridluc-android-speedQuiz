@@ -2,14 +2,12 @@ package com.fridluc.speedgame;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextWatcher;
-
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,19 +21,38 @@ public class MainActivity extends AppCompatActivity {
     private EditText ET_SaisieJoueur1;
     private EditText ET_SaisieJoueur2;
     private MaterialButton BT_NouvellePartie;
+    private final int QUESTION = R.id.action_question;
     String joueur1 = "";
     String joueur2 = "";
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == QUESTION) {
+            ouvrirAjoutQuestionActivity();
+            return true;
+            // Ajoutez d'autres cas pour gérer d'autres entrées de menu au besoin
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void ouvrirAjoutQuestionActivity() {
+        // Implémentez la logique pour ouvrir l'activité où vous pouvez ajouter une question à la base de données SQLite
+        // Par exemple, vous pouvez utiliser une intention (Intent) pour ouvrir une nouvelle activité.
+        Intent ajoutQuestionIntent = new Intent(MainActivity.this, AjoutQuestionActivity.class);
+        startActivity(ajoutQuestionIntent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar mainToolBar = findViewById(R.id.MainToolbar);
         setSupportActionBar(mainToolBar);
 
@@ -92,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
                 joueur2 = ET_SaisieJoueur2.getText().toString();
             }
         });
+
+
 
         BT_NouvellePartie.setOnClickListener(new View.OnClickListener() {
             @Override

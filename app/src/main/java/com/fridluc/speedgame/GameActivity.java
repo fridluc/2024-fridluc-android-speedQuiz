@@ -9,19 +9,23 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fridluc.speedgame.Controllers.QuestionManager;
+import com.fridluc.speedgame.Models.Question;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class GameActivity extends AppCompatActivity {
+
+    Handler handler;
+    Runnable questionRunnable = null;
+    QuestionManager qManager;
 
     private MaterialButton BT_Redémarrer;
     private MaterialButton BT_Menu;
     private MaterialButton BT_Joueur1;
     private MaterialButton BT_Joueur2;
 
-    private TextView TV_Joueur1;
-    private TextView TV_Joueur2;
     private TextView questionJoueur1;
     private TextView questionJoueur2;
     private TextView scoreJoueur1;
@@ -34,13 +38,13 @@ public class GameActivity extends AppCompatActivity {
     private final int JOUEUR1 = 1;
     private final int JOUEUR2 = 2;
 
-    private long delay = 5000;
+    private ArrayList<Question> questionList;
+
+    private boolean appuyer = false;
 
     //private boolean quelquUnARepondu = true;
 
-    Handler handler;
-    Runnable questionRunnable = null;
-    QuestionManager qManager;
+
 
 
     @Override
@@ -53,8 +57,11 @@ public class GameActivity extends AppCompatActivity {
         BT_Joueur1 = findViewById(R.id.hitButtonPlayer1);
         BT_Joueur2 = findViewById(R.id.hitButtonPlayer2);
 
-        TV_Joueur2 = findViewById(R.id.nom_joueur2);
-        TV_Joueur1 = findViewById(R.id.nom_joueur1);
+        BT_Joueur1.setEnabled(false);
+        BT_Joueur2.setEnabled(false);
+
+        TextView TV_Joueur2 = findViewById(R.id.nom_joueur2);
+        TextView TV_Joueur1 = findViewById(R.id.nom_joueur1);
         scoreJoueur1 = findViewById(R.id.TV_Nbre1);
         scoreJoueur2 = findViewById(R.id.TV_Nbre2);
 
@@ -74,6 +81,8 @@ public class GameActivity extends AppCompatActivity {
         String joueur2 = activityGame.getStringExtra("Joueur2");
         TV_Joueur2.setText(joueur2);
 
+        questionList = qManager.getQuestions();
+
         mélangerQuestions();
     }
 
@@ -85,18 +94,18 @@ public class GameActivity extends AppCompatActivity {
         BT_Joueur1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                incrementerScoreJoueur(JOUEUR1);
+                incrementerScoreAvecBouton(JOUEUR1);
                 questionSuivante();
-                resetDelay(5000);
+                appuyer = true;
             }
         });
 
         BT_Joueur2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                incrementerScoreJoueur(JOUEUR2);
+                incrementerScoreAvecBouton(JOUEUR2);
                 questionSuivante();
-                resetDelay(5000);
+                appuyer = true;
             }
         });
 
@@ -117,31 +126,45 @@ public class GameActivity extends AppCompatActivity {
                 scoreJoueur2.setText(String.valueOf(scoreJoueur2Value = 0));
 
                 qManager.setQuestionEnCoursIndex(0);
+                handler = null;
 
                 BT_Joueur1.setEnabled(true);
                 BT_Joueur2.setEnabled(true);
+                appuyer = false;
 
                 mélangerQuestions();
 
+                startQuestionIterative();
                 questionSuivante();
             }
         });
     }
 
-    private void incrementerScoreJoueur(int joueur) {
-        int reponseActuelle = qManager.getReponseQuestionEnCours();
-        if (reponseActuelle == 1) {
+    private void incrementerScoreAvecBouton(int joueur) {
+        if (qManager.getReponseQuestionEnCours() == 1) {
             if (joueur == JOUEUR1) {
                 scoreJoueur1Value++;
             } else if (joueur == JOUEUR2) {
                 scoreJoueur2Value++;
             }
         } else {
-            //si personne répond les deux joueurs prennent 1 point
-
             if (joueur == JOUEUR1) {
                 scoreJoueur1Value = Math.max(0, scoreJoueur1Value - 1);
             } else if (joueur == JOUEUR2) {
+                scoreJoueur2Value = Math.max(0, scoreJoueur2Value - 1);
+            }
+        }
+        scoreJoueur1.setText(String.valueOf(scoreJoueur1Value));
+        scoreJoueur2.setText(String.valueOf(scoreJoueur2Value));
+    }
+
+    private void incrementerScoreSansBouton() {
+        if (qManager.getIndex() > 0 && !appuyer) {
+            if (qManager.getReponseQuestionEnCours() == 0) {
+                scoreJoueur1Value++;
+                scoreJoueur2Value++;
+            } else {
+                scoreJoueur1Value = Math.max(0, scoreJoueur1Value - 1);
                 scoreJoueur2Value = Math.max(0, scoreJoueur2Value - 1);
             }
         }
@@ -169,7 +192,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void startQuestionIterative(){
-        handler = new Handler();
+        if (handler == null)
+            handler = new Handler();
 
         questionRunnable = new Runnable() {
             @Override
@@ -182,7 +206,10 @@ public class GameActivity extends AppCompatActivity {
                     BT_Joueur1.setEnabled(true);
                     BT_Joueur2.setEnabled(true);
 
-                    String questionEnCours = qManager.recevoirQuestion();
+                    incrementerScoreSansBouton();
+                    appuyer = false;
+
+                    String questionEnCours = qManager.recevoirQuestion(questionList);
                     questionJoueur1.setText(questionEnCours);
                     questionJoueur2.setText(questionEnCours);
 
@@ -194,17 +221,15 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void questionSuivante() {
+        appuyer = false;
         if (qManager.endOfList()) {
             resultatFinPartie();
         } else {
-            String questionEnCours = qManager.recevoirQuestion();
+            String questionEnCours = qManager.recevoirQuestion(questionList);
             questionJoueur1.setText(questionEnCours);
             questionJoueur2.setText(questionEnCours);
         }
-    }
-
-    private void resetDelay(long delayReset) {
-        delay = delayReset;
+        long delay = 5000;
         handler.removeCallbacks(questionRunnable);
         handler.postDelayed(questionRunnable, delay);
     }

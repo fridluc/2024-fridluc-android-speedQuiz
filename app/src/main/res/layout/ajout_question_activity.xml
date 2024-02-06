@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/ajout_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ajout_question"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:layout_marginTop="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_ajoutQuestion"
+        style="@style/Button.ALL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/ajouter_question"
+        android:layout_marginRight="20dp"
+        app:layout_constraintEnd_toEndOf="@id/ajout_question"
+        app:layout_constraintRight_toLeftOf="@id/btn_retour"
+        app:layout_constraintTop_toBottomOf="@id/ajout_question" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_retour"
+        style="@style/Button.ALL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/ajouter_question"
+        app:layout_constraintStart_toStartOf="@id/ajout_question"
+        app:layout_constraintTop_toBottomOf="@id/ajout_question" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

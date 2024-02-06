@@ -18,4 +18,6 @@
     <string name="win">Gagné</string>
     <string name="loose">Perdu</string>
     <string name="equals">Égalité</string>
+    <string name="ajout_question">Question</string>
+    <string name="ajouter_question">Ajouter</string>
 </resources>

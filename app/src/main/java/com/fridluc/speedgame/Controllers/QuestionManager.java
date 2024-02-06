@@ -3,7 +3,6 @@ package com.fridluc.speedgame.Controllers;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.fridluc.speedgame.Models.Question;
 import com.fridluc.speedgame.Models.SpeedGameSqLite;
@@ -19,8 +18,11 @@ public class QuestionManager {
     private int questionEnCoursIndex = 0;
     private ArrayList<Question> questionList;
 
+    Context context;
+
     public QuestionManager(Context context){
         questionList = initQuestionList(context);
+        this.context = context;
         Collections.shuffle(questionList);
     }
 
@@ -54,9 +56,6 @@ public class QuestionManager {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.query(true,"quiz",new String[]{"idQuiz","question","reponse"},null,null,null,null,"idquiz",null);
 
-        // Ajoutez des logs de débogage ici
-        Log.d("QuestionManager", "Number of rows in cursor: " + cursor.getCount());
-
         while(cursor.moveToNext()){
             listQuestion.add(new Question(cursor));
         }
@@ -67,20 +66,26 @@ public class QuestionManager {
     }
 
     public int getReponseQuestionEnCours() {
-        return questionList.get(questionEnCoursIndex -1).getReponses();
+        return questionList.get(questionEnCoursIndex).getReponses();
     }
 
-    public ArrayList<Question> getQuestions() {
-        return questionList;
+    public int getIndex() {
+        return questionEnCoursIndex;
     }
 
     public void setQuestionEnCoursIndex(int index) {
         this.questionEnCoursIndex = index;
     }
 
-    public String recevoirQuestion() {
+    public ArrayList<Question> getQuestions() {
+        return initQuestionList(context);
+    }
+
+
+
+    public String recevoirQuestion(ArrayList<Question> questionList) {
         questionEnCoursIndex++;
-        return getQuestions().get(questionEnCoursIndex-1).getIntitule();
+        return questionList.get(questionEnCoursIndex-1).getIntitule();
     }
 
 

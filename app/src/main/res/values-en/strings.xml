@@ -18,4 +18,6 @@
     <string name="win">Winner</string>
     <string name="loose">Looser</string>
     <string name="equals">Match null</string>
+    <string name="ajout_question">Question</string>
+    <string name="ajouter_question">Ajouter</string>
 </resources>
