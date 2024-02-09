@@ -20,29 +20,14 @@ public class QuestionManager {
 
     Context context;
 
+    /**
+     * Constructeur de la classe QuestionManager.
+     * Initialise la liste des questions à partir du contexte donné.
+     * @param context Le contexte de l'application.
+     */
     public QuestionManager(Context context){
         questionList = initQuestionList(context);
         this.context = context;
-        Collections.shuffle(questionList);
-    }
-
-    /**
-     * Méthode pour obtenir l'instance unique de GameManager.
-     * @return L'instance
-     */
-    public static QuestionManager getInstance(Context context) {
-        if (instance == null) {
-            instance = new QuestionManager(context);
-        }
-        return instance;
-    }
-
-    /**
-     * Méthode pour vérifier si c'est la fin de la liste de questions.
-     * @return true si c'est la fin de la liste, sinon false
-     */
-    public boolean endOfList() {
-        return questionEnCoursIndex >= questionList.size();
     }
 
     /**
@@ -65,28 +50,62 @@ public class QuestionManager {
         return listQuestion;
     }
 
-    public int getReponseQuestionEnCours() {
-        return questionList.get(questionEnCoursIndex).getReponses();
-    }
-
-    public int getIndex() {
-        return questionEnCoursIndex;
-    }
-
-    public void setQuestionEnCoursIndex(int index) {
-        this.questionEnCoursIndex = index;
-    }
-
+    /**
+     * Reçois la question de la fonction précédente
+     * @return L'initialisation de la liste de question
+     */
     public ArrayList<Question> getQuestions() {
         return initQuestionList(context);
     }
 
+    /**
+     * Mélange la liste de question
+     * @param questionList Liste de question à mélanger
+     */
+    public void melangerQuestion(ArrayList<Question> questionList) {
+        Collections.shuffle(questionList);
+    }
 
+    /**
+     * Permet de recevoir la réponse de la question en cours
+     * @return La réponse de la question affichée
+     */
+    public int getReponseQuestionEnCours(ArrayList<Question> questionList) {
+        return questionList.get(questionEnCoursIndex-1).getReponses();
+    }
 
+    /**
+     * Met en place l'index de la question
+     * @param index Index de la question
+     */
+    public void setQuestionEnCoursIndex(int index) {
+        this.questionEnCoursIndex = index;
+    }
+
+    /**
+     * Reçois l'index de la question en cours
+     * @return L'index de la question en cours
+     */
+    public int getIndex() {
+        return questionEnCoursIndex;
+    }
+
+    /**
+     * Méthode pour recevoir la question qui doit être afficé
+     * @param questionList La liste des questions à afficher
+     * @return L'intitulé de la question
+     */
     public String recevoirQuestion(ArrayList<Question> questionList) {
         questionEnCoursIndex++;
         return questionList.get(questionEnCoursIndex-1).getIntitule();
     }
 
+    /**
+     * Méthode pour vérifier si c'est la fin de la liste de questions.
+     * @return true si c'est la fin de la liste, sinon false
+     */
+    public boolean endOfList() {
+        return questionEnCoursIndex >= questionList.size();
+    }
 
 }
