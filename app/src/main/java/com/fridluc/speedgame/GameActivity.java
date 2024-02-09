@@ -83,6 +83,8 @@ public class GameActivity extends AppCompatActivity {
         qManager.melangerQuestion(questionList);
 
         startQuestionIterative();
+
+        // Actions lorsqu'un joueur appuie sur son bouton durant le jeu
         BT_Joueur1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +96,6 @@ public class GameActivity extends AppCompatActivity {
                 firstClick = false;
             }
         });
-
 
         BT_Joueur2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +109,7 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        //Permet de retourner à l'activité principale
         BT_Menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +117,8 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        // Bouton qui permet de redémarrer la partie
+        // avec les question dans un autre ordre
         BT_Redémarrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,6 +141,12 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Méthode pour ajouter un point au joueur selon la réponse.
+     * @param playerPoint Le score actuel du joueur.
+     * @param TV_player   Le TextView affichant le score du joueur.
+     * @return Le nouveau score du joueur.
+     */
     private int ajouterPointJoueur(int playerPoint, TextView TV_player) {
         if (qManager.getReponseQuestionEnCours(questionList) == 1) {
             playerPoint++;
@@ -147,6 +157,9 @@ public class GameActivity extends AppCompatActivity {
         return playerPoint;
     }
 
+    /**
+     *Méthode pour ajouter les points en fonction des réponses.
+     */
     private void ajouterPoint() {
         if (qManager.getIndex() > 0 && !appuyer &&
             qManager.getIndex() <= questionList.size() && !qManager.endOfList()) {
@@ -162,6 +175,9 @@ public class GameActivity extends AppCompatActivity {
         scoreJoueur2.setText(String.valueOf(scoreJoueur2Value));
     }
 
+    /**
+     * Méthode pour afficher le résultat final de la partie.
+     */
     private void resultatFinPartie() {
         BT_Joueur1.setEnabled(false);
         BT_Joueur2.setEnabled(false);
@@ -181,6 +197,9 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Méthode pour démarrer l'itération des questions.
+     */
     private void startQuestionIterative(){
         if (handler == null)
             handler = new Handler();
@@ -207,6 +226,9 @@ public class GameActivity extends AppCompatActivity {
         handler.postDelayed(questionRunnable, DELAY);
     }
 
+    /**
+     * Méthode pour passer à la question suivante.
+     */
     private void questionSuivante() {
         if (qManager.endOfList()) {
             resultatFinPartie();
@@ -220,6 +242,9 @@ public class GameActivity extends AppCompatActivity {
         handler.postDelayed(questionRunnable, DELAY);
     }
 
+    /**
+     * Méthode pour retourner à l'activité principale.
+     */
     private void retournerAMainActivity() {
         finish();
     }
