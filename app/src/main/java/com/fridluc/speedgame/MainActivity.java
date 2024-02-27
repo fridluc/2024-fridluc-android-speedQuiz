@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText ET_SaisieJoueur2;
     private MaterialButton BT_NouvellePartie;
 
-    private View MENUUUUUUUU;
-
     private Menu mainMenu = null;
     String joueur1 = "";
     String joueur2 = "";
@@ -41,10 +38,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_question) {
             // Ouvrir AjoutQuestionActivity lorsque l'élément de menu "question" est sélectionné
-            Log.d("MainActivity", "action_question selected");
-
-            Intent intent = new Intent(this, AjoutQuestionActivity.class);
-            startActivity(intent);
+            Intent ajoutQuestion = new Intent(this, AjoutQuestionActivity.class);
+            startActivity(ajoutQuestion);
+            return true;
+        } else if (item.getItemId() == R.id.action_settings) {
+            // Ouvrir nomDeLActivité lorsque l'élément de menu "question" est sélectionné
+            Intent parametrePartie = new Intent(this, ParametrePartieActivity.class);
+            startActivity(parametrePartie);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -69,10 +69,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Ajoutez un écouteur de clic au bouton
+        // Ajoutez un écouteur de clic au bouton pour le nom du premier joueur
         BT_NouveauJoueur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Rend le champ de saisie du nom du joueur 1 visible
                 ET_SaisieJoueur1.setVisibility(View.VISIBLE);
             }
         });
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Rend le champ de saisie du nom du joueur 2 visible
                 ET_SaisieJoueur2.setVisibility(View.VISIBLE);
             }
 
@@ -109,19 +111,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                //Récupère le nom du joueur et le stock dans une variable
                 joueur2 = ET_SaisieJoueur2.getText().toString();
             }
         });
 
-
-
-
         BT_NouvellePartie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Instencie la GameActivity
                 Intent activityGame = new Intent(MainActivity.this, GameActivity.class);
+
+                //Récupère le nom des joueurs
                 activityGame.putExtra("Joueur1", joueur1);
                 activityGame.putExtra("Joueur2", joueur2);
+
+                //Démarre l'activité
                 startActivity(activityGame);
             }
         });
