@@ -27,6 +27,12 @@
             android:screenOrientation="landscape">
         </activity>
 
+        <activity
+            android:name=".AjoutQuestionActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor">
+        </activity>
+
     </application>
 
 </manifest>

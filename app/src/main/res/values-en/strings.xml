@@ -20,4 +20,7 @@
     <string name="equals">Match null</string>
     <string name="ajout_question">Question</string>
     <string name="ajouter_question">Ajouter</string>
+    <string name="annuler">Cancel</string>
+    <string name="terminer">Finish</string>
+    <string name="ajout_reponse">Answer (0 for false et 1 for true)</string>
 </resources>

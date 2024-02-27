@@ -13,11 +13,26 @@
         android:hint="@string/ajout_question"
         android:maxLines="1"
         android:minHeight="48dp"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/ajout_reponse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ajout_reponse"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:layout_marginTop="60dp"
+        android:inputType="number"
+        android:maxLength="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ajout_question"
+        app:layout_constraintTop_toTopOf="@id/ajout_question" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_ajoutQuestion"
@@ -26,19 +41,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/ajouter_question"
-        android:layout_marginRight="20dp"
-        app:layout_constraintEnd_toEndOf="@id/ajout_question"
-        app:layout_constraintRight_toLeftOf="@id/btn_retour"
-        app:layout_constraintTop_toBottomOf="@id/ajout_question" />
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="@id/ajout_reponse"
+        app:layout_constraintRight_toLeftOf="@id/btn_terminer"
+        app:layout_constraintTop_toBottomOf="@id/ajout_reponse" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_retour"
+        android:id="@+id/btn_terminer"
         style="@style/Button.ALL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/ajouter_question"
-        app:layout_constraintStart_toStartOf="@id/ajout_question"
-        app:layout_constraintTop_toBottomOf="@id/ajout_question" />
+        android:layout_marginStart="20dp"
+        android:text="@string/terminer"
+        app:layout_constraintStart_toStartOf="@id/ajout_reponse"
+        app:layout_constraintTop_toBottomOf="@id/ajout_reponse" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

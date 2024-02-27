@@ -20,4 +20,7 @@
     <string name="equals">Égalité</string>
     <string name="ajout_question">Question</string>
     <string name="ajouter_question">Ajouter</string>
+    <string name="annuler">Annuler</string>
+    <string name="terminer">Terminer</string>
+    <string name="ajout_reponse">Réponse (0 pour faux et 1 pour vrai)</string>
 </resources>

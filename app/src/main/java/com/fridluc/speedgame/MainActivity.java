@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText ET_SaisieJoueur1;
     private EditText ET_SaisieJoueur2;
     private MaterialButton BT_NouvellePartie;
-    private final int QUESTION = R.id.action_question;
+
+    private View MENUUUUUUUU;
+
+    private Menu mainMenu = null;
     String joueur1 = "";
     String joueur2 = "";
 
@@ -29,24 +33,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        mainMenu = menu;
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == QUESTION) {
-            ouvrirAjoutQuestionActivity();
+        if (item.getItemId() == R.id.action_question) {
+            // Ouvrir AjoutQuestionActivity lorsque l'élément de menu "question" est sélectionné
+            Log.d("MainActivity", "action_question selected");
+
+            Intent intent = new Intent(this, AjoutQuestionActivity.class);
+            startActivity(intent);
             return true;
-            // Ajoutez d'autres cas pour gérer d'autres entrées de menu au besoin
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void ouvrirAjoutQuestionActivity() {
-        // Implémentez la logique pour ouvrir l'activité où vous pouvez ajouter une question à la base de données SQLite
-        // Par exemple, vous pouvez utiliser une intention (Intent) pour ouvrir une nouvelle activité.
-        Intent ajoutQuestionIntent = new Intent(MainActivity.this, AjoutQuestionActivity.class);
-        startActivity(ajoutQuestionIntent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 joueur2 = ET_SaisieJoueur2.getText().toString();
             }
         });
+
 
 
 
