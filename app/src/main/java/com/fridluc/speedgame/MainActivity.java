@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Menu mainMenu = null;
     String joueur1 = "";
     String joueur2 = "";
+    private float newDelay;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
         ET_SaisieJoueur1 = findViewById(R.id.startPlayer1EditText);
         ET_SaisieJoueur2 = findViewById(R.id.startPlayer2EditText);
         BT_NouvellePartie = findViewById(R.id.btn_startNewGame);
+
+        Intent activityParametrePartie = getIntent();
+        newDelay = activityParametrePartie.getFloatExtra("delayPartie", 5);
+
+        float tkt = newDelay;
+
+        Log.d("Nouveau délai", "Le float est : " + tkt);
     }
 
     @Override
@@ -122,10 +131,11 @@ public class MainActivity extends AppCompatActivity {
                 //Instencie la GameActivity
                 Intent activityGame = new Intent(MainActivity.this, GameActivity.class);
 
-                //Récupère le nom des joueurs
+                //Récupère les valeurs pour la partie
                 activityGame.putExtra("Joueur1", joueur1);
                 activityGame.putExtra("Joueur2", joueur2);
-
+                activityGame.putExtra("delayPartie", newDelay);
+                Log.d("TAG", "Nouveau délai : " + newDelay);
                 //Démarre l'activité
                 startActivity(activityGame);
             }

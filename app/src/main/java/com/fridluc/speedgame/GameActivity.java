@@ -40,7 +40,10 @@ public class GameActivity extends AppCompatActivity {
     private boolean appuyer = false;
     private boolean firstClick = true;
 
-    private final long DELAY = 5000;
+    private final int DELAY = 5;
+    private float delayPartie;
+    private int nombreQuestion;
+    private final int NOMBRE_QUESTION = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,9 @@ public class GameActivity extends AppCompatActivity {
         String joueur2 = activityGame.getStringExtra("Joueur2");
         TV_Joueur2.setText(joueur2);
 
+        Intent activityMain = getIntent();
+        delayPartie = activityMain.getFloatExtra("delayPartie", DELAY);
+        nombreQuestion = activityMain.getIntExtra("nombreQuestion", NOMBRE_QUESTION);
         questionList = qManager.getQuestions();
     }
 
@@ -219,11 +225,11 @@ public class GameActivity extends AppCompatActivity {
                     questionJoueur1.setText(questionEnCours);
                     questionJoueur2.setText(questionEnCours);
                     firstClick = false;
-                    handler.postDelayed(this, DELAY);
+                    handler.postDelayed(this, (long) (delayPartie * 1000));
                 }
             }
         };
-        handler.postDelayed(questionRunnable, DELAY);
+        handler.postDelayed(questionRunnable, (long) (delayPartie * 1000));
     }
 
     /**

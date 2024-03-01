@@ -33,6 +33,12 @@
             android:screenOrientation="fullSensor">
         </activity>
 
+        <activity
+            android:name=".ParametrePartieActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor">
+        </activity>
+
     </application>
 
 </manifest>
