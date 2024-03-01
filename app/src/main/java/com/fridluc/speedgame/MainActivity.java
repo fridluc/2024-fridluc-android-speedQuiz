@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     String joueur1 = "";
     String joueur2 = "";
     private float newDelay;
+    private final float DELAY = 5;
+    private float nombreQuestion;
+    private final float NOMBRE_QUESTION = 10;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent activityParametrePartie = getIntent();
         newDelay = activityParametrePartie.getFloatExtra("delayPartie", 5);
+        nombreQuestion = activityParametrePartie.getFloatExtra("nombreQuestion", 10);
 
-        float tkt = newDelay;
-
-        Log.d("Nouveau délai", "Le float est : " + tkt);
+        Log.d("msg", "Le float est : " + newDelay);
+        Log.d("msg", "Le nombre de question est : " + nombreQuestion);
     }
 
     @Override
@@ -135,11 +138,12 @@ public class MainActivity extends AppCompatActivity {
                 activityGame.putExtra("Joueur1", joueur1);
                 activityGame.putExtra("Joueur2", joueur2);
                 activityGame.putExtra("delayPartie", newDelay);
-                Log.d("TAG", "Nouveau délai : " + newDelay);
+                activityGame.putExtra("nombreQuestion", nombreQuestion);
+                Log.d("msg", "Le float est : " + newDelay);
+                Log.d("msg", "Le nombre de question est : " + nombreQuestion);
                 //Démarre l'activité
                 startActivity(activityGame);
             }
         });
-
     }
 }

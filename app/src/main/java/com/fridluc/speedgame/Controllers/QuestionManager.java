@@ -25,8 +25,8 @@ public class QuestionManager {
      * Initialise la liste des questions à partir du contexte donné.
      * @param context Le contexte de l'application.
      */
-    public QuestionManager(Context context){
-        questionList = initQuestionList(context);
+    public QuestionManager(Context context, float nombreQuestion){
+        questionList = initQuestionList(context, nombreQuestion);
         this.context = context;
     }
 
@@ -35,11 +35,11 @@ public class QuestionManager {
      * @param context Le contexte de l'application pour passer la query
      * @return Une arraylist charger de Question
      */
-    private ArrayList<Question> initQuestionList(Context context){
+    private ArrayList<Question> initQuestionList(Context context, float nombreQuestion){
         ArrayList<Question> listQuestion = new ArrayList<>();
         SpeedGameSqLite helper = new SpeedGameSqLite(context);
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(true,"quiz",new String[]{"idQuiz","question","reponse"},null,null,null,null,"idquiz",null);
+        Cursor cursor = db.query(true,"quiz",new String[]{"idQuiz","question","reponse"},null,null,null,null,"idquiz", String.valueOf(nombreQuestion));
 
         while(cursor.moveToNext()){
             listQuestion.add(new Question(cursor));
@@ -54,8 +54,8 @@ public class QuestionManager {
      * Reçois la question de la fonction précédente
      * @return L'initialisation de la liste de question
      */
-    public ArrayList<Question> getQuestions() {
-        return initQuestionList(context);
+    public ArrayList<Question> getQuestions(float nombreQuestion) {
+        return initQuestionList(context, nombreQuestion);
     }
 
     /**

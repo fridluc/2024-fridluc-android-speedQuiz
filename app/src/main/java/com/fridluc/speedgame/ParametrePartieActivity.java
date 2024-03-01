@@ -2,10 +2,7 @@ package com.fridluc.speedgame;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +16,9 @@ public class ParametrePartieActivity extends AppCompatActivity {
     private MaterialButton BT_Valider;
     private MaterialButton BT_Annuler;
 
-    private EditText ET_NombreQuestion;
+    private Slider sliderNombreQuestion;
 
-    private int nombreQuestion;
+    private float nombreQuestion;
 
     private float delayPartie;
 
@@ -33,7 +30,7 @@ public class ParametrePartieActivity extends AppCompatActivity {
         sliderDelay = findViewById(R.id.delay_partie);
         BT_Valider = findViewById(R.id.btn_valider);
         BT_Annuler = findViewById(R.id.btn_annuler);
-        ET_NombreQuestion = findViewById(R.id.nombre_question);
+        sliderNombreQuestion = findViewById(R.id.nombre_question);
     }
 
     @Override
@@ -47,23 +44,12 @@ public class ParametrePartieActivity extends AppCompatActivity {
             }
         });
 
-        ET_NombreQuestion.addTextChangedListener(new TextWatcher() {
+        sliderNombreQuestion.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                nombreQuestion = Integer.parseInt(ET_NombreQuestion.getText().toString());
+            public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                nombreQuestion = sliderNombreQuestion.getValue();
             }
         });
-
 
         BT_Valider.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +63,7 @@ public class ParametrePartieActivity extends AppCompatActivity {
             }
         });
 
-        BT_Valider.setOnClickListener(new View.OnClickListener() {
+        BT_Annuler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

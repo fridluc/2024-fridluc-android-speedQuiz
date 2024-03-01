@@ -42,8 +42,8 @@ public class GameActivity extends AppCompatActivity {
 
     private final int DELAY = 5;
     private float delayPartie;
-    private int nombreQuestion;
-    private final int NOMBRE_QUESTION = 10;
+    private float nombreQuestion;
+    private final float NOMBRE_QUESTION = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
 
         relativeLayout.setVisibility(View.INVISIBLE);
 
-        qManager = new QuestionManager(this);
+
 
         Intent activityGame = getIntent();
         String joueur1 = activityGame.getStringExtra("Joueur1");
@@ -77,9 +77,14 @@ public class GameActivity extends AppCompatActivity {
         TV_Joueur2.setText(joueur2);
 
         Intent activityMain = getIntent();
-        delayPartie = activityMain.getFloatExtra("delayPartie", DELAY);
-        nombreQuestion = activityMain.getIntExtra("nombreQuestion", NOMBRE_QUESTION);
-        questionList = qManager.getQuestions();
+        delayPartie = activityMain.getFloatExtra("delayPartie", 5);
+        nombreQuestion = activityMain.getFloatExtra("nombreQuestion", 10);
+
+        qManager = new QuestionManager(this, nombreQuestion);
+
+        questionList = qManager.getQuestions(nombreQuestion);
+
+        boutonJoueurValide(false);
     }
 
     @Override
@@ -90,6 +95,8 @@ public class GameActivity extends AppCompatActivity {
 
         startQuestionIterative();
 
+        //boutonJoueurGrisé(false);
+
         // Actions lorsqu'un joueur appuie sur son bouton durant le jeu
         BT_Joueur1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +104,9 @@ public class GameActivity extends AppCompatActivity {
                 if (!firstClick) {
                     scoreJoueur1Value = ajouterPointJoueur(scoreJoueur1Value, scoreJoueur1);
                     appuyer = true;
+                    boutonJoueurValide(false);
                 }
-                questionSuivante();
+
                 firstClick = false;
             }
         });
@@ -109,8 +117,9 @@ public class GameActivity extends AppCompatActivity {
                 if (!firstClick) {
                     scoreJoueur2Value = ajouterPointJoueur(scoreJoueur2Value, scoreJoueur2);
                     appuyer = true;
+                    boutonJoueurValide(false);
                 }
-                questionSuivante();
+
                 firstClick = false;
             }
         });
@@ -142,7 +151,8 @@ public class GameActivity extends AppCompatActivity {
 
                 qManager.melangerQuestion(questionList);
 
-                questionSuivante();
+                startQuestionIterative();
+                //questionSuivante();
             }
         });
     }
@@ -185,8 +195,7 @@ public class GameActivity extends AppCompatActivity {
      * Méthode pour afficher le résultat final de la partie.
      */
     private void resultatFinPartie() {
-        BT_Joueur1.setEnabled(false);
-        BT_Joueur2.setEnabled(false);
+        boutonJoueurValide(false);
 
         relativeLayout.setVisibility(View.VISIBLE);
         ligneSeparation.setVisibility(View.INVISIBLE);
@@ -224,6 +233,8 @@ public class GameActivity extends AppCompatActivity {
                     String questionEnCours = qManager.recevoirQuestion(questionList);
                     questionJoueur1.setText(questionEnCours);
                     questionJoueur2.setText(questionEnCours);
+                    boutonJoueurValide(true);
+
                     firstClick = false;
                     handler.postDelayed(this, (long) (delayPartie * 1000));
                 }
@@ -253,5 +264,10 @@ public class GameActivity extends AppCompatActivity {
      */
     private void retournerAMainActivity() {
         finish();
+    }
+
+    private void boutonJoueurValide(boolean valide) {
+        BT_Joueur1.setEnabled(valide);
+        BT_Joueur2.setEnabled(valide);
     }
 }
