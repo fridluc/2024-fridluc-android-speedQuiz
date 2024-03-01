@@ -24,4 +24,6 @@
     <string name="terminer">Finish</string>
     <string name="ajout_reponse">Answer (0 for false et 1 for true)</string>
     <string name="valider">Validate</string>
+    <string name="number_question">Nombre of question</string>
+    <string name="delay_party">Party delay</string>
 </resources>

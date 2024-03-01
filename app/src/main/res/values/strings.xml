@@ -24,4 +24,6 @@
     <string name="terminer">Terminer</string>
     <string name="ajout_reponse">Réponse (0 pour faux et 1 pour vrai)</string>
     <string name="valider">Valider</string>
+    <string name="number_question">Nombre de question</string>
+    <string name="delay_party">delai de partie</string>
 </resources>

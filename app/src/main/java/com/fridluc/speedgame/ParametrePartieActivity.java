@@ -2,7 +2,10 @@ package com.fridluc.speedgame;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,11 @@ public class ParametrePartieActivity extends AppCompatActivity {
 
     private Slider sliderDelay;
     private MaterialButton BT_Valider;
+    private MaterialButton BT_Annuler;
+
+    private EditText ET_NombreQuestion;
+
+    private int nombreQuestion;
 
     private float delayPartie;
 
@@ -24,6 +32,8 @@ public class ParametrePartieActivity extends AppCompatActivity {
 
         sliderDelay = findViewById(R.id.delay_partie);
         BT_Valider = findViewById(R.id.btn_valider);
+        BT_Annuler = findViewById(R.id.btn_annuler);
+        ET_NombreQuestion = findViewById(R.id.nombre_question);
     }
 
     @Override
@@ -37,6 +47,24 @@ public class ParametrePartieActivity extends AppCompatActivity {
             }
         });
 
+        ET_NombreQuestion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                nombreQuestion = Integer.parseInt(ET_NombreQuestion.getText().toString());
+            }
+        });
+
+
         BT_Valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,7 +72,15 @@ public class ParametrePartieActivity extends AppCompatActivity {
 
                 //Récupère le délai entré pour la partie
                 parametreActivity.putExtra("delayPartie", delayPartie);
+                parametreActivity.putExtra("nombreQuestion", nombreQuestion);
                 startActivity(parametreActivity);
+            }
+        });
+
+        BT_Valider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
